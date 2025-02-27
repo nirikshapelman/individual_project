@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wardrobe Organizer</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        form { margin-bottom: 20px; }
+        input, select, button { margin: 5px; padding: 8px; }
+        .clothes-list, .recommendations { margin-top: 20px; }
+        .clothes-item, .recommendation-item { margin: 5px 0; }
+    </style>
+</head>
+<body>
+    <h1>Wardrobe Organizer</h1>
+
+    <!-- Form to Add Clothes -->
+    <form id="clothesForm">
+        <input type="text" id="name" placeholder="Name" required>
+        <input type="text" id="category" placeholder="Category" required>
+        <input type="text" id="color" placeholder="Color" required>
+        <button type="submit">Add Item</button>
+    </form>
+    
+    <h2>Clothing Items</h2>
+    <div class="clothes-list" id="clothesList"></div>
+
+    <!-- Recommendation Feature -->
+    <h2>Get Clothing Recommendations</h2>
+    <input type="text" id="location" placeholder="Enter your city">
+    <button onclick="getRecommendations()">Recommend</button>
+    
+    <div class="recommendations" id="recommendationsList"></div>
+
+    <script>
+        const form = document.getElementById('clothesForm');
+        const clothesList = document.getElementById('clothesList');
+        const recommendationsList = document.getElementById('recommendationsList');
+
+        async function fetchClothes() {
+            const res = await fetch('http://localhost:3000/clothes');
+            const data = await res.json();
+            clothesList.innerHTML = '';
+            data.forEach(item => {
+                const div = document.createElement('div');
+                div.classList.add('clothes-item');
+                div.innerHTML = `${item.name} - ${item.category} - ${item.color}  
+                <button onclick="deleteClothes(${item.id})">Delete</button>`;
+                clothesList.appendChild(div);
+            });
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const category = document.getElementById('category').value;
+            const color = document.getElementById('color').value;
+
+            await fetch('http://localhost:3000/clothes', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, category, color })
+            });
+            form.reset();
+            fetchClothes();
+        });
+
+        async function deleteClothes(id) {
+            await fetch(`http://localhost:3000/clothes/${id}`, { method: 'DELETE' });
+            fetchClothes();
+        }
+
+        // Fetch weather-based clothing recommendations
+        async function getRecommendations() {
+            const location = document.getElementById('location').value;
+            if (!location) {
+                alert("Please enter a location.");
+                return;
+            }
+
+            const res = await fetch(`http://localhost:3000/recommendations/${location}`);
+            const data = await res.json();
+            
+            if (data.recommendations.length === 0) {
+                recommendationsList.innerHTML = `<p>No suitable clothing found for ${data.weather} weather.</p>`;
+                return;
+            }
+
+            recommendationsList.innerHTML = `<h3>Recommended for ${data.weather} weather:</h3>`;
+            data.recommendations.forEach(item => {
+                const div = document.createElement('div');
+                div.classList.add('recommendation-item');
+                div.innerHTML = `${item.name} - ${item.category} - ${item.color}`;
+                recommendationsList.appendChild(div);
+            });
+        }
+
+        fetchClothes();
+    </script>
+</body>
+</html>
