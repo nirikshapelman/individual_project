@@ -26,6 +26,10 @@
     <h2>Clothing Items</h2>
     <div class="clothes-list" id="clothesList"></div>
 
+    <h2>Daily Lookbook</h2>
+    <div class="lookbookList" id="lookbookList"></div>
+    
+
     <!-- Recommendation Feature -->
     <h2>Get Clothing Recommendations</h2>
     <input type="text" id="location" placeholder="Enter your city">
@@ -36,6 +40,7 @@
     <script>
         const form = document.getElementById('clothesForm');
         const clothesList = document.getElementById('clothesList');
+        const lookbookList = document.getElementById('lookbookList');
         const recommendationsList = document.getElementById('recommendationsList');
 
         async function fetchClothes() {
@@ -45,10 +50,38 @@
             data.forEach(item => {
                 const div = document.createElement('div');
                 div.classList.add('clothes-item');
-                div.innerHTML = `${item.name} - ${item.category} - ${item.color}  
+                div.innerHTML = `${item.name} - ${item.category} - ${item.color} 
+                <button onclick="addToLookbook(${item.id})">WEAR</button> 
                 <button onclick="deleteClothes(${item.id})">Delete</button>`;
                 clothesList.appendChild(div);
             });
+        }
+
+        async function fetchLookbook(){
+            const res = await fetch ('http://localhost:3000/lookbook');
+            const data = await res.json();
+            lookbookList.innerHTML = '';
+
+            data.forEach(entry =>{
+                const div = document.createElement('div');
+                div.classList.add('lookbook-item');
+                div.innerHTML = `${entry.date}: ${entry.name} - ${entry.category} - ${entry.color}`;
+                lookbookList.appendChild(div);
+            });
+        }
+
+        async function addToLookbook(clothing_id) {
+            const date = new Date().toISOString().split('T')[0];
+            
+            await fetch ('http://localhost:3000/lookbook',{
+                method: 'POST',
+                headers:{'Content-Type': 'application/json'},
+                body: JSON.stringify({clothing_id,date})
+
+            
+            });
+
+            fetchLookbook();
         }
 
         form.addEventListener('submit', async (e) => {
@@ -117,6 +150,7 @@
         }
 
         fetchClothes();
+        fetchLookbook();
     </script>
 </body>
 </html>

@@ -96,13 +96,21 @@ async function getClothingItems(weatherType) {
 }
 
 
-// Create table if not exists
+// Create table for clothes
 db.run(`CREATE TABLE IF NOT EXISTS clothes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     category TEXT NOT NULL,
     color TEXT NOT NULL,
     weather_suitability TEXT
+)`);
+
+// Create table for lookbook
+db.run(`CREATE TABLE IF NOT EXISTS lookbook (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    clothing_id INTEGER,
+    date TEXT,
+    FOREIGN KEY (clothing_id) REFERENCES clothes(id)
 )`);
 
 // db.run(`ALTER TABLE clothes 
@@ -324,6 +332,77 @@ app.post('/clothes', (req, res) => {
 //     }
 // }
 
+// Lookbook calls
+app.get ('/lookbook',(req, res) => {
+    db.all(`
+        SELECT lookbook.id, lookbook.date, clothes.name, clothes.category, clothes.color
+        FROM lookbook
+        JOIN clothes ON lookbook.clothing_id = clothes.id`, [], (err, rows) => {
+            if(err) return res.status(500).json ({error: err.message});
+            res.json(rows);
+        });
+});
+
+app.post ('/lookbook',(req, res) => {
+    const {clothing_id, date} = req.body;
+    db.run ("INSERT INTO lookbook (clothing_id, date) VALUES (?, ?)", [clothing_id, date], function(err) {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ id: this.lastID, clothing_id, date });
+    });
+
+});
+
+//Analytics calls
+app.get ('/analytics',async (req, res) => {
+    try {
+        const mostWorn = await new Promise((resolve, reject) => {
+            db.all(
+                `SELECT c.name, c.category, c.color, COUNT(l.clothing_id) AS count
+                FROM lookbook l
+                JOIN clothes c ON l.clothing_id = c.id
+                GROUP BY l.clothing_id
+                ORDER BY count DESC
+                LIMIT 5;`,
+                (err, rows) => {
+                    if (err) reject(err);
+                    else resolve(rows);
+                }
+            );
+        });
+
+        const leastWorn = await new Promise((resolve, reject) => {
+            db.all(
+                `SELECT c.name, c.category, c.color, COUNT(l.clothing_id) AS count
+                FROM clothes c
+                LEFT JOIN lookbook l ON c.id = l.clothing_id
+                GROUP BY c.id
+                ORDER BY count ASC
+                LIMIT 5;`,
+                (err, rows) => {
+                    if (err) reject(err);
+                    else resolve(rows);
+                }
+            );
+        });
+
+        // not sure if I want to keep this
+
+        // const weatherAnalytics = await db.all (
+        //     `SELECT w.condition, c.name, COUNT(l.clothing_id) AS count
+        //     FROM lookbook l
+        //     JOIN clothes c ON l.clothing_id = c.id
+        //     JOIN weather w ON l.date = w.date
+        //     GROUP BY w.condition, c.id
+        //     ORDER BY count DESC;`
+        // );
+
+        res.json ({mostWorn , leastWorn})
+    } catch (err){
+        console.error(err);
+        res.status(500).json({error: 'Failed to fetch analytics'});
+    }
+
+});
 
 async function getClothingCategories(weatherType, category) {
     return new Promise((resolve, reject) =>{

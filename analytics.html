@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wardrobe Analytics</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h2 {margin-top: 20px;}
+        .analytics-section{ margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Wardrobe Analytics</h1>
+    <div class="analytics-section">
+        <h2>Most Worn Items</h2>
+        <div id="mostWorn"></div>
+    </div>
+
+    <div class="analytics-section">
+        <h2>Least Worn Items</h2>
+        <div id="leastWorn"></div>
+    </div>
+
+    <!-- <div class="analytics-section">
+        <h2>Weather-Based Insights</h2>
+        <div id="weatherAnalytics"></div>
+    </div> -->
+
+    <script>
+        async function fetchAnalytics() {
+            console.log('Fetching analytics...'); 
+            try {
+                const res = await fetch('http://localhost:3000/analytics');
+                const data = await res.json();
+
+                console.log(data);
+
+                displayAnalytics('mostWorn', data.mostWorn);
+                displayAnalytics('leastWorn', data.leastWorn);
+                // displayWeatherAnalytics(data.weatherAnalytics);
+            } catch (err) {
+                console.error("Failed to fetch analytics", err);
+            }
+        }
+
+        function displayAnalytics(containerId, items) {
+            console.log('Fetched Items:', items);  // Log the items (not data)
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+
+            if (items.length === 0) {
+                container.innerHTML = '<p>No data available.</p>';
+                return;
+            }
+
+            items.forEach(item => {
+                const div = document.createElement('div');
+                div.innerHTML = `${item.name} - ${item.category} - ${item.color} (Worn ${item.count} times)`;
+                container.appendChild(div);
+            });
+        }
+
+        // Call the function to fetch analytics when the page loads
+        fetchAnalytics();
+    </script>
+</body>
+</html>
