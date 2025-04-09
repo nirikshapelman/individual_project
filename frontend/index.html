@@ -28,7 +28,7 @@
 
     <h2>Daily Lookbook</h2>
     <div class="lookbookList" id="lookbookList"></div>
-    
+
 
     <!-- Recommendation Feature -->
     <h2>Get Clothing Recommendations</h2>
@@ -43,6 +43,39 @@
         const lookbookList = document.getElementById('lookbookList');
         const recommendationsList = document.getElementById('recommendationsList');
 
+        // function getClothingName(name, category){
+        //     const nameLower = name.toLowerCase()
+        //     const categoryLower = category.toLowerCase();
+
+        //     if (nameLower.includes('shirt')) {
+        //         return 'shirt';
+        //     } else if (nameLower.includes('trousers') || nameLower.includes('jeans')) {
+        //         return 'trousers';
+        //     } else if (nameLower.includes('tank') || nameLower.includes('halter')|| nameLower.includes('vest')) {
+        //         return 'tank';
+        //     } else if (nameLower.includes('boot')) {
+        //         return 'boot';
+        //     }else if (nameLower.includes('trainer')|| nameLower.includes('af1s')) {
+        //             return 'trainer';
+        //     }else if (nameLower.includes('jumper')|| nameLower.includes('sweater')) {
+        //                 return 'jumper';}
+        //     else if (nameLower.includes('skirt')) {
+        //                     return 'skirt';}
+        //     else if (nameLower.includes('heels')) {
+        //                         return 'heels';}
+        //     else if (nameLower.includes('jacket')|| nameLower.includes('coat')|| nameLower.includes('fleece')) {
+        //                             return 'jacket';}   
+        //     else if (nameLower.includes('shorts')) {
+        //                                 return 'shorts';}        
+        //     // Add more categories 
+   
+        //     else if (categoryLower === 'top') {return 'top_svg';}
+        //     else if (categoryLower === 'bottoms') {return 'bottom_svg';}
+        //     else if (categoryLower === 'footwear') {return 'footwear_svg';}
+        //     return 'other_svg';
+        // }
+    
+
         async function fetchClothes() {
             const res = await fetch('http://localhost:3000/clothes');
             const data = await res.json();
@@ -51,11 +84,54 @@
                 const div = document.createElement('div');
                 div.classList.add('clothes-item');
                 div.innerHTML = `${item.name} - ${item.category} - ${item.color} 
+                <div class="svg-container">${item.svg}</div>
                 <button onclick="addToLookbook(${item.id})">WEAR</button> 
                 <button onclick="deleteClothes(${item.id})">Delete</button>`;
+
+                //const svg_con = getClothingName(item.name);
+
+                // const img = document.createElement('img');
+                // img.src = `public/images/${svg_con}.svg`;
+                // img.alt = 'Shirt';
+                // img.width = 100;
+                // div.appendChild(img)
+
+        
                 clothesList.appendChild(div);
             });
         }
+     
+
+    //     function loadandModify(item, svg_con) {
+    //     const svgFile = `/images/${svg_con}.svg`;
+    //     console.log("The svg file is", svgFile);
+
+    //     return fetch(svgFile)
+    //         .then(response => {
+    //             if (!response.ok) {
+    //                 throw new Error(`Failed to load SVG: ${response.statusText}`);
+    //             }
+    //             return response.text();
+    //         })
+    //         .then(svgContent => {
+    //             const parser = new DOMParser();
+    //             const svgDoc = parser.parseFromString(svgContent, 'image/svg+xml');
+
+    //             const clothingBody = svgDoc.querySelector(`#${svg_con}-body`);
+    //             if (clothingBody) {
+    //                 clothingBody.setAttribute('fill', item.color); // Set color dynamically
+    //             } else {
+    //                 console.warn(`Element #${svg_con}-body not found in ${svg_con}.svg`);
+    //             }
+
+    //             return svgDoc.documentElement.outerHTML;
+    //         })
+    //         .catch(err => {
+    //             console.error('Error loading the SVG:', err);
+    //             return ''; // Fallback if error
+    //         });
+    // }
+
 
         async function fetchLookbook(){
             const res = await fetch ('http://localhost:3000/lookbook');
@@ -65,8 +141,11 @@
             data.forEach(entry =>{
                 const div = document.createElement('div');
                 div.classList.add('lookbook-item');
-                div.innerHTML = `${entry.date}: ${entry.name} - ${entry.category} - ${entry.color}`;
-                lookbookList.appendChild(div);
+                div.innerHTML = `
+                <div class="svg-container">${entry.svg}</div>
+                ${entry.date}: ${entry.name} - ${entry.category} - ${entry.color}
+            `;
+            lookbookList.appendChild(div);
             });
         }
 
@@ -89,7 +168,7 @@
             const name = document.getElementById('name').value;
             const category = document.getElementById('category').value;
             const color = document.getElementById('color').value;
-
+           
             await fetch('http://localhost:3000/clothes', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -149,8 +228,13 @@
             }
         }
 
+
+
         fetchClothes();
         fetchLookbook();
     </script>
+    <a href="/analytics.html">
+        <button>2</button>
+    </a>
 </body>
 </html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="loginstyle.css"> 
+</head>
+<body>
+    <div class="signup-container">
+        <h2>Create account?</h2>
+        <form id="signup-form" action="http://localhost:3000/signup" method="POST">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="signup-email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="signup-username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="signup-password" name="password" required>
+            </div>
+            <button type="submit">Sign Up</button>
+        </form>
+        <p> Already have an account? <a href="#" id = "show-login" >Login in here </a> </p>
+    </div>
+
+    <div id="login-form" class="form-box hidden">
+        <h2>Login</h2>
+        <form action = "http://localhost:3000/login" method="POST">
+            <div class = "form-group">
+                <label for = "login-email" >Email</label>
+                <input type ="email" id ="login-email" name="email" required>
+            </div>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="login-username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="login-password" name="password" required>
+                </div>
+                <button type="submit">Login</button>    
+        </form>
+    </div>
+
+
+    <script>
+        const signupForm = document.getElementById('signup-form');
+        const loginForm = document.getElementById('login-form');
+        const showLogin = document.getElementById('show-login');
+
+        showLogin.addEventListener('click', (e) => {
+            e.preventDefault();
+            signupForm.classList.add('hidden');
+            loginForm.classList.remove('hidden');
+        });
+
+    </script>
+</body>
+</html>

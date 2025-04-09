@@ -28,7 +28,7 @@ function determineCoverageAndPracticality(item) {
 
     return {
         ...item,
-        coverage: coverageLevels[coverage] || 1, // Default to 1 if undefined
+        coverage: coverageLevels[coverage] || 1, 
         practicality: practicalityLevels[practicality] || 1
     };
 }
