@@ -3,12 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Vesta</title>
     <link rel="stylesheet" href="loginstyle.css"> 
 </head>
 <body>
-    <div class="signup-container">
-        <h2>Create account?</h2>
+    <div class="container">
+    <div class="title-page">
+        <h1 id ="vesta-title" >VESTA</h1>
+        <button id="signup-button">SIGN UP</button>
+    </div>
+
+    <div class="signup-container hidden">
+        <h2>CREATE ACCOUNT?</h2>
         <form id="signup-form" action="http://localhost:3000/signup" method="POST">
             <div class="form-group">
                 <label for="email">Email</label>
@@ -22,13 +28,13 @@
                 <label for="password">Password</label>
                 <input type="password" id="signup-password" name="password" required>
             </div>
-            <button type="submit">Sign Up</button>
+            <button type="submit">SUBMIT</button>
         </form>
         <p> Already have an account? <a href="#" id = "show-login" >Login in here </a> </p>
     </div>
 
     <div id="login-form" class="form-box hidden">
-        <h2>Login</h2>
+        <h2>LOGIN</h2>
         <form action = "http://localhost:3000/login" method="POST">
             <div class = "form-group">
                 <label for = "login-email" >Email</label>
@@ -42,19 +48,28 @@
                     <label for="password">Password</label>
                     <input type="password" id="login-password" name="password" required>
                 </div>
-                <button type="submit">Login</button>    
+                <button type="submit">LOGIN</button>    
         </form>
     </div>
 
 
     <script>
-        const signupForm = document.getElementById('signup-form');
+        const signupPage = document.querySelector('.title-page');
+        const signupContainer = document.querySelector('.signup-container');
         const loginForm = document.getElementById('login-form');
         const showLogin = document.getElementById('show-login');
+        const signupButton = document.getElementById('signup-button');
+
+        signupButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            signupPage.classList.add('shift-left');
+            signupButton.classList.add('hidden');
+            signupContainer.classList.remove('hidden');
+        });
 
         showLogin.addEventListener('click', (e) => {
             e.preventDefault();
-            signupForm.classList.add('hidden');
+            signupContainer.classList.add('hidden');
             loginForm.classList.remove('hidden');
         });
 

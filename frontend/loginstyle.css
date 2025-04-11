@@ -1,26 +1,78 @@
-/* style.css */
+/* loginstyle.css */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f4f6f8;
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', serif;
+    background: #F3E5D8;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
+    color: #A41C1C;
+}
+
+.title-page{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.6s ease;
+    font-family: 'Playfair Display', serif;
+
+}
+
+.title-page.shift-left{
+    align-items: flex-start;
+    font-family: 'Playfair Display', serif;
+    padding-left: 60px;
+    justify-content: center;
+}
+
+#vesta-title{
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+#signup-button.hidden{
+    display: none;
+}
+
+.container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: auto;
+    max-height: 90vh;
+    margin: auto;
+    width: 100%;
+    max-width: 1200px;
+    padding: 40px;
+    gap: 60px;
+    box-shadow: 0 8px 24px rgb(0, 0, 0);
+    background-color: #F3E5D8 ;
+    border: 2px solid black;
+    
 }
 
 .signup-container, .form-box {
-    background-color: white;
+    background-color: #F3E5D8;
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     width: 100%;
     max-width: 400px;
+    border: 2px solid black;
 }
 
 h2 {
+    font-family: 'Playfair Display', serif;
     text-align: center;
     margin-bottom: 20px;
+    color: black;
 }
 
 .form-group {
@@ -38,7 +90,8 @@ input[type="text"],
 input[type="password"] {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ccc;
+    background-color: #F3E5D8;
+    border: 2px solid black;
     border-radius: 8px;
     font-size: 14px;
     box-sizing: border-box;
@@ -47,17 +100,18 @@ input[type="password"] {
 button {
     width: 100%;
     padding: 12px;
-    background-color: #5a67d8;
-    color: white;
+    background-color: #F3E5D8;
+    color: black;
     border: none;
     border-radius: 8px;
     font-size: 16px;
     cursor: pointer;
     margin-top: 10px;
+    border: 2px solid black;
 }
 
 button:hover {
-    background-color: #434190;
+    background-color: #D8B4A3;
 }
 
 p {

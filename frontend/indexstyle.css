@@ -1,0 +1,246 @@
+/* indexstyle.css */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', serif;
+    background: #F3E5D8;
+    box-sizing: border-box;
+    color: #A41C1C;
+    line-height: 1.6;
+}
+
+h1,h2,h3{
+    font-family: 'Playfair Display', serif;
+    color: #4B3E2E;
+    font-weight: bold;
+    text-align: center;
+}
+
+h1{
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+h2,h3{
+    font-size: 2rem;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+form{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+
+input, select, button{
+    padding: 12px 20px;
+    margin: 10px 0;
+    border: 1px solid white;
+    border-radius: 8px;
+    font-size: 16px;
+    width: 250px;
+    background-color: white;
+    box-shadow: 0 4px 6px black;
+}
+
+button{
+    background-color: #E6CBB2;
+    border: none ;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+}
+
+button:hover{
+    background-color: #D8BFA7;
+}
+
+.clothes-list, .lookbookList{
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.clothes-list{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+.clothes-item,.lookbook-item{
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 8px 12px black;
+    text-align: center;
+    transition: transform 0.3s ease,box-shadow 0.3s ease;
+}
+.clothes-item:hover{
+    transform: translateY(-5px);
+    box-shadow: 0 12px 18px rgba(0,  0, 0, 0.15);
+}
+
+.recommendations-list {
+    display: flex;
+    flex-direction: row;
+    gap: 15px; 
+    justify-content: center;
+    margin-top: 20px;
+    overflow-x: auto;
+    padding: 20px;
+}
+
+.recommendation-item {
+    background: white;
+    padding: 15px; 
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    min-width: 180px;
+    flex-shrink: 0; 
+}
+
+.recommendation-item img,
+.recommendation-item svg {
+    width: 100%;
+    height: auto;
+    max-height: 150px; 
+    object-fit: contain;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.recommendation-item h3 {
+    margin: 0;
+    font-size: 1rem; 
+    font-weight: bold;
+    color: #4B3E2E;
+}
+
+/* .clothes-item{
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px black;
+    text-align: center;
+} */
+
+.clothes-item img,
+.clothes-item svg, .lookbook-item img,
+.lookbook-item svg{
+    width: 100%;
+    height: auto;
+    max-height: 250px;
+    object-fit: contain;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+
+
+.svg-container{
+    margin: 8px 0;
+}
+
+.lookbook-row{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+}
+.lookbookList{
+    margin: 80px auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
+    gap: 50px;
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
+    padding: 60px 30px;
+    background-color:  #F9F4EF;
+    max-width: 1200px;
+}
+
+
+.lookbook-item{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.3s ease;
+    
+}
+.lookbook-item img,
+.lookbook-item svg{
+    width: 100%;
+    max-height: 500px;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px black;
+}
+
+
+
+#currentDateDisplay{
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.right-button{
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    padding-right: 20px;
+}
+
+.right-button button{
+    width: auto;
+    padding: 8px 16px;
+    font-family: 'Playfair Display',serif;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    box-shadow: none;
+    cursor: pointer;
+}
+
+.right-button button:hover{
+    background-color: #555;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* .clothes-item, .lookbook-item, .recommendations-item{
+    background-color: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 8px 12px black;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+} */
+
+
+
+#currentDateDisplay{
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+
+
+

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wardrobe Analytics</title>
+    <link rel="stylesheet" href="analyticsstyle.css">
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
         h2 { margin-top: 20px; }
@@ -11,20 +12,20 @@
     </style>
 </head>
 <body>
-    <h1>Wardrobe Analytics</h1>
+    <h1>WARDROBE ANALYTICS</h1>
     
     <div class="analytics-section">
-        <h2>Most Worn Items</h2>
+        <h2>MOST WORN</h2>
         <div id="mostWorn"></div>
     </div>
 
     <div class="analytics-section">
-        <h2>Least Worn Items</h2>
+        <h2>LEAST WORN</h2>
         <div id="leastWorn"></div>
     </div>
 
     <div class="analytics-section">
-        <h2>Donated Clothes</h2>
+        <h2>DONATED</h2>
         <div id="donatedItems"></div>
     </div>
 
@@ -115,8 +116,7 @@
                     div.classList.add("clothes-item");
                     div.innerHTML = `
                         ${item.name} - ${item.category} - ${item.color}
-                        <button onclick="reclaimClothes(${item.id})">Reclaim</button>
-                        <button onclick="deleteDonatedClothes(${item.id})">Delete</button>
+                        <button onclick="reclaimClothes(${item.id})">RECLAIM</button>
                     `;
                     donatedList.appendChild(div);
                 });
@@ -162,5 +162,13 @@
 
         fetchAnalytics();
     </script>
+    <div class = "left-button">
+        <a href="/index.html">
+            <button>1</button>
+        </a></div>
+    <div class = "right-button">
+            <a href="/lookbooks.html">
+                <button>3</button>
+            </a></div>
 </body>
 </html>

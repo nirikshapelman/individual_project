@@ -159,6 +159,17 @@ db.run(`CREATE TABLE IF NOT EXISTS donations (
     FOREIGN KEY (clothing_id) REFERENCES clothes(id) ON DELETE CASCADE
 )`);
 
+db.run(`CREATE TABLE IF NOT EXISTS likes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    liker_id INTEGER,
+    lookbook_user_id INTEGER,
+    date TEXT,
+    UNIQUE(liker_id,lookbook_user_id, date),
+    FOREIGN KEY (liker_id) REFERENCES account(id),
+    FOREIGN KEY (lookbook_user_id) REFERENCES lookbook(id)
+)`);
+
+
 
 
 
@@ -191,7 +202,9 @@ app.post('/signup', (req, res) => {
             return res.send('Error creating account.');
         }
         const userId = this.lastID;
-        res.redirect(`/index.html?userId=${userId}`);
+        req.session.user_id = userId
+        //const userId = this.lastID;
+        res.redirect(`/index.html`);
     });
 });
 
@@ -232,6 +245,9 @@ app.get('/analytics-page', (req, res) => {
     res.sendFile(__dirname + '/frontend/analytics.html');
 });
 
+app.get('/lookbook-page', (req, res) => {
+    res.sendFile(__dirname + '/frontend/lookbook.html');
+});
 
 //usercreation
 app.get('/user/:userId', (req, res) => {
@@ -412,7 +428,7 @@ app.post('/clothes', (req, res) => {
         return 'other_svg';
     }
 
-    const svg_con = getClothingName(name);
+    const svg_con = getClothingName(name , category);
 
                 // SVG manually
                 let svgContent = '';
@@ -951,15 +967,25 @@ app.post('/clothes', (req, res) => {
 // Lookbook calls
 app.get ('/lookbook',(req, res) => {
     const userId = req.session.user_id;
+    const {date} = req.query;
 
-    db.all(`
+    let query =`
         SELECT lookbook.id, lookbook.date, clothes.name, clothes.category, clothes.color, clothes.svg
         FROM lookbook
         JOIN clothes ON lookbook.clothing_id = clothes.id
-        WHERE lookbook.user_id = ?`, [userId], (err, rows) => {
-            if(err) return res.status(500).json ({error: err.message});
+        WHERE lookbook.user_id = ?`
+        ;
+        const params = [userId];
+        if (date){
+            query += ` AND lookbook.date = ?`;
+            params.push(date);
+        }
+
+        db.all(query,params, (err,rows)=>{
+            if(err) return res.status(500).json({error: err.message});
             res.json(rows);
         });
+
 });
 
 app.post ('/lookbook',(req, res) => {
@@ -970,6 +996,105 @@ app.post ('/lookbook',(req, res) => {
         res.json({ id: this.lastID, clothing_id, userId, date });
     });
 
+});
+
+app.delete('/lookbook/:id', async(req,res)=>{
+    const id = req.params.id;
+    db.run("DELETE FROM lookbook WHERE id = ?", [id], function(err){
+        if (err) return res.status(500).json({error:err.message});
+        res.json({success: true, deletedId: id});
+    })
+})
+
+//Lookbook Likes
+app.get('/lookbooks/today',(req,res)=>{
+    const today = new Date().toISOString().split('T')[0];
+    db.all(`SELECT lb.user_id, c.name, c.category, c.color, c.svg,
+            (SELECT COUNT(*) FROM likes ll WHERE ll.lookbook_user_id = lb.user_id AND ll.date = ?) AS likes_count
+        FROM lookbook lb
+        JOIN clothes c ON lb.clothing_id = c.id
+        WHERE lb.date = ?
+    `, [today, today], (err, rows) => {
+    if (err) {
+        console.error(err);
+        return res.status(500).json({ success: false, error: err.message });
+    }
+
+    const lookbooks = {};
+    rows.forEach(row => {
+        if (!lookbooks[row.user_id]){
+            lookbooks[row.user_id]={
+                user_id: row.user_id,
+                likes_count: row.likes_count,
+                clothes: []
+            };
+        }
+        lookbooks[row.user_id].clothes.push({
+            name: row.name,
+            category: row.category,
+            color: row.color,
+            svg:row.svg
+        });
+    });
+    res.json({ success: true, lookbooks: Object.values(lookbooks) });
+}
+
+    )
+})
+
+
+app.post('/like-lookbook', (req, res) => {
+    const liker_id = req.session.user_id; 
+    const { lookbook_user_id, date } = req.body;
+
+    db.get('SELECT * FROM likes WHERE lookbook_user_id = ? AND liker_id = ? AND date = ?',
+        [lookbook_user_id, liker_id, date], (err, row) => {
+            if (err) {
+                return res.status(500).json({ error: "Error checking like status" });
+            }
+            if (row) {
+                return res.status(400).json({ error: 'You have already liked this lookbook today' });
+            }
+
+            db.run('INSERT INTO likes(liker_id, lookbook_user_id, date) VALUES (?,?,?)',
+                [liker_id, lookbook_user_id, date], function (err) {
+                    if (err) {
+                        return res.status(500).json({ error: "Error inserting like" });
+                    }
+                    res.json({ success: true });
+                });
+        });
+});
+
+
+
+
+
+app.get('/lookbook/:id/likes', (req, res) => {
+    const lookbook_user_id = req.params.id;
+
+    db.get('SELECT COUNT(*) AS likeCount FROM likes WHERE lookbook_user_id = ?', [lookbook_user_id], (err, row) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        res.json({ likeCount: row.likeCount });
+    });
+});
+
+app.get('/lookbooks/:date',(req,res)=>{
+    const date= req.params.date;
+    db.all(`SELECT lb.user_id,c.name,c.category,c.color,c.svg
+        FROM lookbook lb
+        JOIN clothes ON lb.clothing_id = c.id
+        WHERE lb.date= ?`,
+    [date],(err,rows)=>{
+        if (err) {
+            console.error(err);
+            res.status(500).json({ success: false, error: err.message });
+        } else {
+            res.json({ success: true, lookbooks: rows });
+        }
+    });
 });
 
 //Analytics calls
@@ -1163,6 +1288,7 @@ app.delete('/clothes/:id', (req, res) => {
         res.json({ message: 'Item deleted' });
     });
 });
+
 
 // function clusterClothingItems(clothingItems, numClusters) {
 //     if (!clothingItems || clothingItems.length === 0) {

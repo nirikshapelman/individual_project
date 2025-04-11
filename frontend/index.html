@@ -4,16 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wardrobe Organizer</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        form { margin-bottom: 20px; }
-        input, select, button { margin: 5px; padding: 8px; }
-        .clothes-list, .recommendations { margin-top: 20px; }
-        .clothes-item, .recommendation-item { margin: 5px 0; }
-    </style>
+    <link rel="stylesheet" href="indexstyle.css"> 
 </head>
 <body>
-    <h1>Wardrobe Organizer</h1>
+    <h1>WARDROBE ORGANIZER</h1>
 
     <!-- Form to Add Clothes -->
     <form id="clothesForm">
@@ -23,19 +17,25 @@
         <button type="submit">Add Item</button>
     </form>
     
-    <h2>Clothing Items</h2>
+    <h2>CLOTHING ITEMS</h2>
     <div class="clothes-list" id="clothesList"></div>
 
-    <h2>Daily Lookbook</h2>
+    <h2>DAILY LOOKBOOK</h2>
+    <div>
+        <button onclick = "changeDate(-1)">← PREVIOUS</button>
+        <span id = "currentDateDisplay"></span>
+        <button onclick = "changeDate(1)"> NEXT →</button>
+        </div>
     <div class="lookbookList" id="lookbookList"></div>
 
 
+
     <!-- Recommendation Feature -->
-    <h2>Get Clothing Recommendations</h2>
+    <h2>GET CLOTHING RECOMMENDATIONS</h2>
     <input type="text" id="location" placeholder="Enter your city">
-    <button onclick="getRecommendations()">Recommend</button>
+    <button onclick="getRecommendations()">RECOMMEND</button>
     
-    <div class="recommendations" id="recommendationsList"></div>
+    <div class="recommendations-list" id="recommendationsList"></div>
 
     <script>
         const form = document.getElementById('clothesForm');
@@ -74,6 +74,63 @@
         //     else if (categoryLower === 'footwear') {return 'footwear_svg';}
         //     return 'other_svg';
         // }
+
+        let currentDate = new Date();
+        function formatDate(date){
+        return date.toISOString().split('T')[0];
+        }
+        function updateDateDisplay(){
+            const displayDate = formatDate(currentDate);
+            const today = formatDate(new Date());
+            if(displayDate === today){
+                document.getElementById('currentDateDisplay').innerText = "TODAY";
+            }else{
+                document.getElementById('currentDateDisplay').innerText= displayDate;
+            }
+            
+        }
+
+        function changeDate(offset){
+            currentDate.setDate(currentDate.getDate() + offset);
+            updateDateDisplay();
+            fetchLookbookByDate(formatDate(currentDate));
+        }
+
+        async function  fetchLookbookByDate(date) {
+            const res = await fetch(`http://localhost:3000/lookbook?date=${date}`);
+            const data = await res.json();
+            lookbookList.innerHTML='';
+
+            if (data.length === 0){
+                lookbookList.innerHTML = `<p>No outfit saved for ${date}. </p>`;
+                return;
+            }
+
+            const prefferedOrder = ['top', 'bottoms', 'footwear'];
+            data.sort((a,b) => {
+                const indexA = prefferedOrder.indexOf(a.category.toLowerCase());
+                const indexB = prefferedOrder.indexOf(b.category.toLowerCase());
+                return indexA - indexB;
+            });
+
+            data.forEach(entry =>{
+                const div = document.createElement('div');
+                div.classList.add('lookbook-item');
+                div.innerHTML=`<div class = "svg-container"> ${entry.svg}</div>
+                ${entry.date}: ${entry.name} - ${entry.category}- ${entry.color}
+                <button onclick= "removeFromLookbook(${entry.id})">REMOVE</button>`;
+                lookbookList.appendChild(div);
+
+            })
+            
+        }
+
+        async function removeFromLookbook(id) {
+            await fetch(`http://localhost:3000/lookbook/${id}`,{method: 'DELETE'});
+            fetchLookbookByDate(formatDate(currentDate));
+            
+        }
+
     
 
         async function fetchClothes() {
@@ -86,7 +143,7 @@
                 div.innerHTML = `${item.name} - ${item.category} - ${item.color} 
                 <div class="svg-container">${item.svg}</div>
                 <button onclick="addToLookbook(${item.id})">WEAR</button> 
-                <button onclick="deleteClothes(${item.id})">Delete</button>`;
+                <button onclick="deleteClothes(${item.id})">DELETE</button>`;
 
                 //const svg_con = getClothingName(item.name);
 
@@ -160,7 +217,7 @@
             
             });
 
-            fetchLookbook();
+            fetchLookbookByDate(formatDate(currentDate));
         }
 
         form.addEventListener('submit', async (e) => {
@@ -209,21 +266,27 @@
             if (top) {
                 const div = document.createElement('div');
                 div.classList.add('recommendation-item');
-                div.innerHTML = `Top: ${top.name} - ${top.category} - ${top.color}`;
+                div.innerHTML= `
+                <div class="svg-container">${top.svg}</div>
+                TOP: ${top.name} - ${top.category} - ${top.color}`;
                 recommendationsList.appendChild(div);
             }
 
             if (bottoms) {
                 const div = document.createElement('div');
                 div.classList.add('recommendation-item');
-                div.innerHTML = `Bottoms: ${bottoms.name} - ${bottoms.category} - ${bottoms.color}`;
+                div.innerHTML= `
+                <div class="svg-container">${bottoms.svg}</div>
+                BOTTOMS: ${bottoms.name} - ${bottoms.category} - ${bottoms.color}`;
                 recommendationsList.appendChild(div);
             }
 
             if (footwear) {
                 const div = document.createElement('div');
                 div.classList.add('recommendation-item');
-                div.innerHTML = `Footwear: ${footwear.name} - ${footwear.category} - ${footwear.color}`;
+                div.innerHTML= `
+                <div class="svg-container">${footwear.svg}</div>
+                FOOTWEAR: ${footwear.name} - ${footwear.category} - ${footwear.color}`;
                 recommendationsList.appendChild(div);
             }
         }
@@ -231,10 +294,12 @@
 
 
         fetchClothes();
-        fetchLookbook();
+        updateDateDisplay();
+        fetchLookbookByDate(formatDate(currentDate));
     </script>
+    <div class = "right-button">
     <a href="/analytics.html">
         <button>2</button>
-    </a>
+    </a></div>
 </body>
 </html>

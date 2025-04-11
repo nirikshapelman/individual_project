@@ -7,7 +7,9 @@
     "express-session": "^1.18.1",
     "k-means": "^1.0.0",
     "ml-kmeans": "^6.0.0",
+    "ml-pca": "^4.1.1",
     "natural": "^8.0.1",
+    "plotly": "^1.0.6",
     "sqlite3": "^5.1.7",
     "string-similarity": "^4.0.4"
   },

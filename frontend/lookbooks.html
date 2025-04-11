@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Community Lookbooks</title>
+    <link rel="stylesheet" href="lookbooks.css">
+</head>
+<body>
+    <h1>STYLE SPOTLIGHT</h1>
+    <div id="lookbookContainer" class="lookbook-container"></div>
+
+    <script>
+        async function fetchLookbooks() {
+            try {
+                const response = await fetch('/lookbooks/today'); 
+                const data = await response.json(); 
+
+                if (data.success) {
+                    const lookbooks = data.lookbooks;
+                    lookbooks.sort((a, b)=> (b.likes_count || 0) -(a.likes_count || 0));
+                    const container = document.getElementById('lookbookContainer');
+
+                    container.innerHTML = '';
+
+                    lookbooks.forEach(lookbook => {
+                        const div = document.createElement('div');
+                        div.classList.add('lookbook-item');
+                        const clothesHTML = lookbook.clothes.map(item =>`
+                            <p><strong>${item.name}</strong></p>
+                            <p>Category: ${item.category}</p>
+                            <p>Color: ${item.color}</p>
+                            <div>${item.svg}</div>
+                            <hr>
+                        `).join('');
+
+                        div.innerHTML=`
+                        <h3> User#${lookbook.user_id}'s Lookbook </h3> ${clothesHTML}
+                        <button onclick="likeLookbook(${lookbook.user_id}, ${lookbook.lookbook_id})">❤</button>
+                        <span id="like-count-${lookbook.user_id}">Likes</span>
+                                `;
+                        container.appendChild(div);
+                        fetchLikeCount(lookbook.user_id);
+                    });
+                }
+            } catch (err) {
+                console.error('Error fetching lookbooks:', err);
+            }
+        }
+
+        async function likeLookbook(lookbook_user_id, lookbook_id) {
+            const date = new Date().toISOString().split('T')[0]; 
+
+            const response = await fetch('/like-lookbook', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ lookbook_user_id, date })
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                alert('Lookbook liked!');
+                fetchLookbooks(); 
+            } else {
+                alert(data.error);
+            }
+        }
+
+        async function fetchLikeCount(lookbook_user_id) {
+            const response = await fetch(`/lookbook/${lookbook_user_id}/likes`);
+            const data = await response.json();
+            document.getElementById(`like-count-${lookbook_user_id}`).innerText = `${data.likeCount} Likes`;
+        }
+
+        fetchLookbooks();
+    </script>
+</body>
+</html>
