@@ -169,7 +169,12 @@ db.run(`CREATE TABLE IF NOT EXISTS likes (
     FOREIGN KEY (lookbook_user_id) REFERENCES lookbook(id)
 )`);
 
-
+db.run(`CREATE TABLE IF NOT EXISTS user_settings (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    default_location INTEGER,
+    FOREIGN KEY (user_id) REFERENCES account(id)
+)`);
 
 
 
@@ -266,6 +271,15 @@ app.get('/user/:userId', (req, res) => {
 
         res.send(`Welcome, ${row.name}! Here is your wardrobe.`);
 
+    });
+});
+
+app.get('/logout',(req,res)=>{
+    req.session.destroy(err => {
+        if(err){
+            return res.send ('Error logging out');
+        }
+        res.redirect('/login.html');
     });
 });
 
@@ -1009,11 +1023,13 @@ app.delete('/lookbook/:id', async(req,res)=>{
 //Lookbook Likes
 app.get('/lookbooks/today',(req,res)=>{
     const today = new Date().toISOString().split('T')[0];
+    console.log("date is:", today);
     db.all(`SELECT lb.user_id, c.name, c.category, c.color, c.svg,
-            (SELECT COUNT(*) FROM likes ll WHERE ll.lookbook_user_id = lb.user_id AND ll.date = ?) AS likes_count
+        (SELECT COUNT(*) FROM likes ll WHERE ll.lookbook_user_id = lb.user_id 
+        AND DATE(ll.date) = DATE(?)) AS likes_count
         FROM lookbook lb
         JOIN clothes c ON lb.clothing_id = c.id
-        WHERE lb.date = ?
+        WHERE DATE(lb.date) = DATE(?)
     `, [today, today], (err, rows) => {
     if (err) {
         console.error(err);
@@ -1070,16 +1086,16 @@ app.post('/like-lookbook', (req, res) => {
 
 
 
-app.get('/lookbook/:id/likes', (req, res) => {
-    const lookbook_user_id = req.params.id;
+// app.get('/lookbook/:id/likes', (req, res) => {
+//     const lookbook_user_id = req.params.id;
 
-    db.get('SELECT COUNT(*) AS likeCount FROM likes WHERE lookbook_user_id = ?', [lookbook_user_id], (err, row) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.json({ likeCount: row.likeCount });
-    });
-});
+//     db.get('SELECT COUNT(*) AS likeCount FROM likes WHERE lookbook_user_id = ?', [lookbook_user_id], (err, row) => {
+//         if (err) {
+//             return res.status(500).json({ error: err.message });
+//         }
+//         res.json({ likeCount: row.likeCount });
+//     });
+// });
 
 app.get('/lookbooks/:date',(req,res)=>{
     const date= req.params.date;
@@ -1287,6 +1303,36 @@ app.delete('/clothes/:id', (req, res) => {
         }
         res.json({ message: 'Item deleted' });
     });
+});
+
+//Default user location
+app.post('/users/location', async (req, res) => {
+    const userId = req.session.user_id;
+    const { location } = req.body;
+
+    try {
+        const existingUserSetting = await db.get('SELECT id FROM user_settings WHERE user_id = ?', [userId]);
+        console.log('1');  
+
+        if (existingUserSetting) {
+            console.log('updating location for user:', userId);
+            await db.run('UPDATE user_settings SET default_location = ? WHERE user_id = ?', [location, userId]);
+            res.json({ success: true });
+        } else {
+            console.log('inserting new user setting for user:', userId);
+            await db.run('INSERT INTO user_settings (user_id, default_location) VALUES (?, ?)', [userId, location]);
+            res.json({ success: true });
+        }
+    } catch (error) {
+        console.error('Error handling location update:', error);
+        res.status(500).json({ error: 'Failed to update or insert location' });
+    }
+});
+
+app.get('/users/location', async (req, res) => {
+    const userId = req.session.user_id;
+    const row = await db.get(`SELECT default_location FROM user_settings WHERE user_id = ?`, [userId]);
+    res.json({ location: row?.default_location || null });
 });
 
 

@@ -1,0 +1,55 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Community Lookbooks</title>
+    <link rel="stylesheet" href="lookbooks.css">
+</head>
+<body>
+    <h1>SETTINGS</h1>
+    <button id = "logoutButton">LOG OUT</button>
+    <div>
+        <label for=" location">Location</label>
+        <input type = "text" id = "location" name = "location">
+        <button onclick="saveLocation()">Save</button>
+    <script>
+        document.getElementById('logoutButton').addEventListener('click', () => {
+            window.location.href = '/logout';
+        });
+
+        async function loadCurrentLocation(){
+            const res = await fetch ('http://localhost:3000/users/location');
+            const data = await res.json();
+
+            if (data.location){
+                document.getElementById('location').value = data.location;
+            }
+        }
+
+        loadCurrentLocation();
+
+        async function saveLocation() {
+            const location = document.getElementById('location').value.trim();
+
+            if(!location){
+                alert("Please enter location");
+                return;
+            }
+
+            const res = await fetch('http://localhost:3000/users/location', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ location })
+            });
+
+            const data = await res.json();
+
+            if(data.success){;
+                alert("location saved")
+            }else{
+                alert("failed to save location");
+            }
+            
+        }
+    </script>
+    </body>
+    </html>

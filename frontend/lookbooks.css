@@ -1,16 +1,20 @@
+/* lookbooks.css */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f7f7f7;
+    font-family: 'Poppins', serif;
+    background-color: #F3E5D8;
     color: #333;
     margin: 0;
     padding: 20px;
 }
 
 h1 {
+    font-family: 'Playfair Display', serif;
     text-align: center;
     margin-bottom: 30px;
     font-size: 2em;
-    color: #444;
+    color: #A41C1C;
 }
 
 .lookbook-container {
@@ -36,7 +40,7 @@ h1 {
 
 .lookbook-item h3 {
     margin-top: 0;
-    color: #222;
+    color: black;
 }
 
 .lookbook-item p {

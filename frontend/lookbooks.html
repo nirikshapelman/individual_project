@@ -36,7 +36,7 @@
                         div.innerHTML=`
                         <h3> User#${lookbook.user_id}'s Lookbook </h3> ${clothesHTML}
                         <button onclick="likeLookbook(${lookbook.user_id}, ${lookbook.lookbook_id})">❤</button>
-                        <span id="like-count-${lookbook.user_id}">Likes</span>
+                        <span id="like-count-${lookbook.user_id}">${lookbook.likes_count} Likes</span>
                                 `;
                         container.appendChild(div);
                         fetchLikeCount(lookbook.user_id);

@@ -11,10 +11,10 @@
 
     <!-- Form to Add Clothes -->
     <form id="clothesForm">
-        <input type="text" id="name" placeholder="Name" required>
+        <input type="text" id="name" placeholder=" Clothing Name" required>
         <input type="text" id="category" placeholder="Category" required>
         <input type="text" id="color" placeholder="Color" required>
-        <button type="submit">Add Item</button>
+        <button type="submit">ADD ITEM</button>
     </form>
     
     <h2>CLOTHING ITEMS</h2>
@@ -36,6 +36,10 @@
     <button onclick="getRecommendations()">RECOMMEND</button>
     
     <div class="recommendations-list" id="recommendationsList"></div>
+
+    <div class=" top-bar">
+        <button id = "settingsButton">⚙️</button>
+            </div>
 
     <script>
         const form = document.getElementById('clothesForm');
@@ -242,10 +246,24 @@
 
         // Fetch weather-based clothing recommendations
         async function getRecommendations() {
-            const location = document.getElementById('location').value;
-            if (!location) {
-                alert("Please enter a location.");
-                return;
+            let locationInput = document.getElementById('location').value.trim();
+            let location = locationInput;
+            if (!locationInput) {
+                const res = await fetch('http://localhost:3000/users/location');
+                const data = await res.json();
+                location = data.location;
+
+                if (!location) {
+                    alert("Please enter a location.");
+                    return;
+                }
+            } else {
+                // Step 2: Save location to user profile if input is provided
+                await fetch('http://localhost:3000/users/location', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ location })
+                });
             }
 
             const res = await fetch(`http://localhost:3000/recommendations/${location}`);
@@ -290,6 +308,10 @@
                 recommendationsList.appendChild(div);
             }
         }
+
+        document.getElementById('settingsButton').addEventListener('click',() => {
+            window.location.href = '/settings.html'
+        });
 
 
 

@@ -49,6 +49,7 @@ input, select, button{
 }
 
 button{
+    font-family: 'Playfair Display' , serif;
     background-color: #E6CBB2;
     border: none ;
     cursor: pointer;
