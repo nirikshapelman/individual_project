@@ -21,12 +21,13 @@ const API_KEY = '35ee18a6ae4749d48dc125126250603';
 app.use(cors());
 app.use(express.json());
 app.use('/images', express.static('public/images'));// svg image usage
-app.use(express.static('frontend'));
 
-// svg conversion
+
+// makes login the front page
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
+    res.sendFile(__dirname + '/frontend/login.html');
 });
+app.use(express.static('frontend'));
 
 // user id isn't processing
 app.use(session({
@@ -1198,6 +1199,13 @@ app.post("/donate", (req, res) => {
                     console.error("Error inserting into donations:", err.message);
                     return res.status(500).json({ success: false, error: err.message });
                 }
+
+                db.run("DELETE FROM lookbook WHERE clothing_id=?", [id], function (err) {
+                    if (err) {
+                        console.error("Error deleting from lookbook table:", err.message);
+                        return res.status(500).json({ success: false, error: err.message });
+                    }
+                })
                 
 
                 db.run("DELETE FROM clothes WHERE id = ?", [id], function (err) {
