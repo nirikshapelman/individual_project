@@ -192,6 +192,23 @@ button:hover{
     font-size: 1.2rem;
 }
 
+#settingsButton{
+    width: auto;
+    padding: 8px 16px;
+    font-family: 'Playfair Display',serif;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    box-shadow: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#settingsButton:hover{
+    background-color: #555;
+}
+
 .right-button{
     display: flex;
     justify-content: flex-end;

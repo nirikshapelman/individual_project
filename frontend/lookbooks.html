@@ -6,6 +6,9 @@
     <link rel="stylesheet" href="lookbooks.css">
 </head>
 <body>
+    <div class=" top-bar">
+        <button id = "settingsButton">⚙️ SETTINGS</button>
+            </div>
     <h1>STYLE SPOTLIGHT</h1>
     <div id="lookbookContainer" class="lookbook-container"></div>
 
@@ -35,7 +38,7 @@
 
                         div.innerHTML=`
                         <h3> User#${lookbook.user_id}'s Lookbook </h3> ${clothesHTML}
-                        <button onclick="likeLookbook(${lookbook.user_id}, ${lookbook.lookbook_id})">❤</button>
+                        <button onclick="likeLookbook(${lookbook.user_id}, ${lookbook.lookbook_id})">🤍</button>
                         <span id="like-count-${lookbook.user_id}">${lookbook.likes_count} Likes</span>
                                 `;
                         container.appendChild(div);
@@ -70,8 +73,15 @@
             const data = await response.json();
             document.getElementById(`like-count-${lookbook_user_id}`).innerText = `${data.likeCount} Likes`;
         }
+        document.getElementById('settingsButton').addEventListener('click',() => {
+            window.location.href = '/settings.html'
+        });
 
         fetchLookbooks();
     </script>
+     <div class = "left-button">
+        <a href="/analytics.html">
+            <button>Page 2</button>
+        </a></div>
 </body>
 </html>

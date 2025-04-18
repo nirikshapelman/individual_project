@@ -12,6 +12,9 @@
     </style>
 </head>
 <body>
+    <div class=" top-bar">
+        <button id = "settingsButton">⚙️ SETTINGS</button>
+            </div>
     <h1>WARDROBE ANALYTICS</h1>
     
     <div class="analytics-section">
@@ -157,18 +160,24 @@
                 }
             });
         }
+        document.getElementById('settingsButton').addEventListener('click',() => {
+            window.location.href = '/settings.html'
+        });
 
         
 
         fetchAnalytics();
     </script>
+    <div class = "button-row">
     <div class = "left-button">
         <a href="/index.html">
-            <button>1</button>
+            <button>Page 1</button>
         </a></div>
     <div class = "right-button">
             <a href="/lookbooks.html">
-                <button>3</button>
-            </a></div>
+                <button> Page 3</button>
+            </a>
+        </div>
+        </div>
 </body>
 </html>

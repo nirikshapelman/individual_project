@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="indexstyle.css"> 
 </head>
 <body>
+    <div class=" top-bar">
+        <button id = "settingsButton">⚙️ SETTINGS</button>
+            </div>
     <h1>WARDROBE ORGANIZER</h1>
 
     <!-- Form to Add Clothes -->
@@ -37,9 +40,7 @@
     
     <div class="recommendations-list" id="recommendationsList"></div>
 
-    <div class=" top-bar">
-        <button id = "settingsButton">⚙️</button>
-            </div>
+
 
     <script>
         const form = document.getElementById('clothesForm');
@@ -100,6 +101,7 @@
             fetchLookbookByDate(formatDate(currentDate));
         }
 
+        //updated function
         async function  fetchLookbookByDate(date) {
             const res = await fetch(`http://localhost:3000/lookbook?date=${date}`);
             const data = await res.json();
@@ -246,6 +248,7 @@
 
         // Fetch weather-based clothing recommendations
         async function getRecommendations() {
+            //implementation of the saved location - not running
             let locationInput = document.getElementById('location').value.trim();
             let location = locationInput;
             if (!locationInput) {
@@ -258,7 +261,6 @@
                     return;
                 }
             } else {
-                // Step 2: Save location to user profile if input is provided
                 await fetch('http://localhost:3000/users/location', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -321,7 +323,7 @@
     </script>
     <div class = "right-button">
     <a href="/analytics.html">
-        <button>2</button>
+        <button>Page 2</button>
     </a></div>
 </body>
 </html>

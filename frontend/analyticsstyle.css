@@ -42,6 +42,22 @@ h2{
 .analytics-section div{
     margin-top: 10px;
 }
+#settingsButton{
+    width: auto;
+    padding: 8px 16px;
+    font-family: 'Playfair Display',serif;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    box-shadow: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#settingsButton:hover{
+    background-color: #555;
+}
 
 button{
     font-family: 'Playfair Display' , serif;
@@ -75,12 +91,18 @@ button:hover{
     margin-bottom: 10px 0;
 }
 
+.button-row{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
 
 
 
 .left-button{
     display: flex;
-    justify-content: flex-start;
     gap: 10px;
     margin-top: 20px;
 }
@@ -99,3 +121,23 @@ button:hover{
     background-color: #555;
 }
 
+
+.right-button{
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.right-button button{
+    padding: 8px 16px;
+    font-family: 'Playfair Display',serif;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.right-button button:hover{
+    background-color: #555;
+}

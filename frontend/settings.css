@@ -1,0 +1,60 @@
+/* settings.css */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+body{
+    margin: 0;
+    padding: 40px 20px;
+    font-family: Poppins, serif;
+    background-color: #F3E5D8;
+    color: #4B3E2E;
+    line-height: 1.6;
+    box-sizing: border-box;
+}
+
+h1{
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    text-align: center;
+    color: #A41C1C;
+    margin-bottom: 50px;
+}
+
+div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+label{
+    font-size: 1rem;
+    color: black;
+    margin-bottom: 8px;
+    text-align: left;
+    width: 100%;
+}
+
+button{
+    font-family: 'Playfair Display' , serif;
+    margin-top: 10px;
+    text-align: center;
+    padding: 10px 18px;
+    background-color: #E6CBBA;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    color:#4B3E2E;
+    margin-top: 30px;
+    width: 200px;
+}
+
+button:hover{
+    background-color: #D8BFA7;
+}

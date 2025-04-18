@@ -330,7 +330,7 @@ app.get('/recommendations/:location', async (req, res) => {
     }
 });
 
-
+// NLP test
 function processClothingItem(name) {
     let weatherSuitability = determineWeatherSuitability(name);
     let item = { name, weatherSuitability };
@@ -372,6 +372,7 @@ console.log(processClothingItem("hoodie"));
 //         return [];
 //     }
 // }
+
 // Categorize clothing item based on name using string similarity
 const givenCategories = {
     "top": ["t-shirt", "hoodie", "sweater", "jacket", "tank top"],
@@ -379,11 +380,11 @@ const givenCategories = {
     "footwear": ["trainers", "boots", "heels", "sandals"]
 };
 
-function categorizeClothing(name) {
+function categorizeClothing(clothingName) {
     for (let name in givenCategories) {
         const matches = stringSimilarity.findBestMatch(name.toLowerCase(), givenCategories[name]);
         if (matches.bestMatch.rating > 0.7) {
-            return name;
+            return category;
         }
     }
     return "unknown";
@@ -431,11 +432,10 @@ app.post('/clothes', (req, res) => {
                         return 'skirt';}
         else if (name.includes('heels')) {
                             return 'heels';}
-        else if (name.includes('jacket')|| name.includes('coat')|| name.includes('fleece')) {
+        else if (name.includes('jacket')|| name.includes('coat')|| name.includes('fleece')|| name.includes('windbreaker')) {
                                 return 'jacket';}   
         else if (name.includes('shorts')) {
-                                    return 'shorts';}        
-        // Add more categories 
+                                    return 'shorts';}         
 
         else if (category === 'top') {return 'top_svg';}
         else if (category === 'bottoms') {return 'bottom_svg';}
@@ -910,74 +910,6 @@ app.post('/clothes', (req, res) => {
     );
 });
 
-
-
-
-// async function clusterCategory(weatherType, category, numClusters) {
-//     return new Promise((resolve, reject) => {
-//         db.all('SELECT * FROM clothes WHERE weather_suitability = ? AND category = ?', [weatherType, category], (err, rows) => {
-//             if (err) {
-//                 reject(err);
-//                 return;
-//             }
-
-//             if (rows.length === 0) {
-//                 resolve([]);
-//                 return;
-//             }
-
-//             // Extract features for clustering
-//             const features = rows.map(item => [
-//                 parseFloat(item.coverage) || 1,
-//                 parseFloat(item.practicality) || 1
-//             ]);
-
-//             // Perform clustering
-//             try {
-//                 const result = ml.kmeans(features, Math.min(numClusters, rows.length));
-
-//                 // Assign clusters back to items
-//                 const clusteredItems = rows.map((item, i) => ({
-//                     ...item,
-//                     cluster: result.clusters[i]
-//                 }));
-
-//                 // Pick one representative from each cluster
-//                 const selectedItems = [];
-//                 const seenClusters = new Set();
-
-//                 for (const item of clusteredItems) {
-//                     if (!seenClusters.has(item.cluster)) {
-//                         selectedItems.push(item);
-//                         seenClusters.add(item.cluster);
-//                     }
-//                 }
-
-//                 resolve(selectedItems);
-//             } catch (error) {
-//                 console.error("Error in clustering category:", error);
-//                 resolve([]);
-//             }
-//         });
-//     });
-// }
-
-// async function getOutfitRecommendation(weatherType) {
-//     try {
-//         const topClustered = await clusterCategory(weatherType, 'top', 3);
-//         const bottomClustered = await clusterCategory(weatherType, 'bottom', 3);
-//         const footwearClustered = await clusterCategory(weatherType, 'footwear', 3);
-
-//         return {
-//             top: topClustered.length ? topClustered[0] : null,
-//             bottom: bottomClustered.length ? bottomClustered[0] : null,
-//             footwear: footwearClustered.length ? footwearClustered[0] : null
-//         };
-//     } catch (error) {
-//         console.error("Error getting outfit recommendation", error);
-//         return null;
-//     }
-// }
 
 // Lookbook calls
 app.get ('/lookbook',(req, res) => {
