@@ -1,3 +1,25 @@
+#Folder Structure
+/individual_project
+│
+│-- .vscode
+│-- /frontend
+│-- /node_modules
+│--/public
+│-- /svgs
+│
+│--attributes.js
+│--cluster_real.js
+│--cluster.js
+│--nlp.js
+│-- package-lock.json
+│-- package.json
+│--README.md
+│--server.js
+│--server1.js
+│--svgGenerator.js
+│--test-pca.js
+│--wardrobe.db
+
 #1 Download Node.js
 (nodejs.org)
 
