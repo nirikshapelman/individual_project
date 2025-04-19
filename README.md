@@ -5,7 +5,6 @@
 │-- /frontend
 │-- /node_modules
 │--/public
-│-- /svgs
 │
 │--attributes.js
 │--cluster_real.js
