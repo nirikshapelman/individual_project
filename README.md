@@ -1,11 +1,24 @@
-Download Node.js (nodejs.org)
+Download Node.js
+(nodejs.org)
+
+Navigate path
+cd c:\runpath
+
+Check Install
 node -v
-npm -v to confirm download
+npm -v
+
+Install Dependancies
 npm install
+
+Install Sqlite3
 npm install sqlite3
-may need to delete node modueles and packages
+
+Delete node modueles and packages (if needed)
 rm -rf node_modules package-lock.json
 npm install
+
+Run the server
 node server.js
 run http://localhost:3000
 
