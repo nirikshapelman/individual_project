@@ -17,7 +17,7 @@
             try {
                 const response = await fetch('/lookbooks/today'); 
                 const data = await response.json(); 
-
+                //Reorder 
                 if (data.success) {
                     const lookbooks = data.lookbooks;
                     lookbooks.sort((a, b)=> (b.likes_count || 0) -(a.likes_count || 0));
@@ -49,7 +49,7 @@
                 console.error('Error fetching lookbooks:', err);
             }
         }
-
+        //Lookbook Likes
         async function likeLookbook(lookbook_user_id, lookbook_id) {
             const date = new Date().toISOString().split('T')[0]; 
 
@@ -67,7 +67,7 @@
                 alert(data.error);
             }
         }
-
+        //Update and Fetch Like Count
         async function fetchLikeCount(lookbook_user_id) {
             const response = await fetch(`/lookbook/${lookbook_user_id}/likes`);
             const data = await response.json();

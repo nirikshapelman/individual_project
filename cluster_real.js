@@ -1,4 +1,4 @@
-//simple clustering with kmeans before experimentation
+//Simple Clustering With Kmeans Before Experimentation
 const ml = require('ml-kmeans');
 
 function clusterOutfits(clothingItems, numClusters = 3) {
@@ -24,7 +24,7 @@ function clusterOutfits(clothingItems, numClusters = 3) {
     return categoryItems.map((item, index) => ({ ...item, cluster: clusters[index] }));
 }
 
-// Function for outfit recommendation
+// Function For Outfit Recommendations
 function getOutfitRecommendation(clothingItems, weatherSuitability) {
     console.log("Raw clothing items:", clothingItems); 
     console.log("Weather suitability:", weatherSuitability);

@@ -8,48 +8,49 @@
     <h1>SETTINGS</h1>
     <button id = "logoutButton">LOG OUT</button>
     <div>
-        <label for=" location">Location</label>
+        <!-- <label for=" location">Location</label>
         <input type = "text" id = "location" name = "location">
-        <button onclick="saveLocation()">Save</button>
+        <button onclick="saveLocation()">Save</button> -->
     <script>
         document.getElementById('logoutButton').addEventListener('click', () => {
             window.location.href = '/logout';
         });
+        
+        // Currently Not Working Function
+        // async function loadCurrentLocation(){
+        //     const res = await fetch ('http://localhost:3000/users/location');
+        //     const data = await res.json();
 
-        async function loadCurrentLocation(){
-            const res = await fetch ('http://localhost:3000/users/location');
-            const data = await res.json();
+        //     if (data.location){
+        //         document.getElementById('location').value = data.location;
+        //     }
+        // }
 
-            if (data.location){
-                document.getElementById('location').value = data.location;
-            }
-        }
+        // loadCurrentLocation();
 
-        loadCurrentLocation();
+        // async function saveLocation() {
+        //     const location = document.getElementById('location').value.trim();
 
-        async function saveLocation() {
-            const location = document.getElementById('location').value.trim();
+        //     if(!location){
+        //         alert("Please enter location");
+        //         return;
+        //     }
 
-            if(!location){
-                alert("Please enter location");
-                return;
-            }
+        //     const res = await fetch('http://localhost:3000/users/location', {
+        //         method: 'POST',
+        //         headers: { 'Content-Type': 'application/json' },
+        //         body: JSON.stringify({ location })
+        //     });
 
-            const res = await fetch('http://localhost:3000/users/location', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ location })
-            });
+        //     const data = await res.json();
 
-            const data = await res.json();
-
-            if(data.success){;
-                alert("location saved")
-            }else{
-                alert("failed to save location");
-            }
+        //     if(data.success){;
+        //         alert("location saved")
+        //     }else{
+        //         alert("failed to save location");
+        //     }
             
-        }
+        // }
     </script>
     </body>
     </html>

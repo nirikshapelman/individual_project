@@ -1,4 +1,4 @@
-//coverage and practicality nlp
+//Coverage And Practicality NLP
 const natural = require('natural');
 const classifier = new natural.BayesClassifier();
 
@@ -16,7 +16,7 @@ classifier.addDocument('hot summer sun', 'low');
 
 
 classifier.train();
-
+// Coverage And Practicality Assigned
 function determineCoverageAndPracticality(item) {
     let words = item.name.toLowerCase().split(" ");
 

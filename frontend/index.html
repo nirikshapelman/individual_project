@@ -48,38 +48,6 @@
         const lookbookList = document.getElementById('lookbookList');
         const recommendationsList = document.getElementById('recommendationsList');
 
-        // function getClothingName(name, category){
-        //     const nameLower = name.toLowerCase()
-        //     const categoryLower = category.toLowerCase();
-
-        //     if (nameLower.includes('shirt')) {
-        //         return 'shirt';
-        //     } else if (nameLower.includes('trousers') || nameLower.includes('jeans')) {
-        //         return 'trousers';
-        //     } else if (nameLower.includes('tank') || nameLower.includes('halter')|| nameLower.includes('vest')) {
-        //         return 'tank';
-        //     } else if (nameLower.includes('boot')) {
-        //         return 'boot';
-        //     }else if (nameLower.includes('trainer')|| nameLower.includes('af1s')) {
-        //             return 'trainer';
-        //     }else if (nameLower.includes('jumper')|| nameLower.includes('sweater')) {
-        //                 return 'jumper';}
-        //     else if (nameLower.includes('skirt')) {
-        //                     return 'skirt';}
-        //     else if (nameLower.includes('heels')) {
-        //                         return 'heels';}
-        //     else if (nameLower.includes('jacket')|| nameLower.includes('coat')|| nameLower.includes('fleece')) {
-        //                             return 'jacket';}   
-        //     else if (nameLower.includes('shorts')) {
-        //                                 return 'shorts';}        
-        //     // Add more categories 
-   
-        //     else if (categoryLower === 'top') {return 'top_svg';}
-        //     else if (categoryLower === 'bottoms') {return 'bottom_svg';}
-        //     else if (categoryLower === 'footwear') {return 'footwear_svg';}
-        //     return 'other_svg';
-        // }
-
         let currentDate = new Date();
         function formatDate(date){
         return date.toISOString().split('T')[0];
@@ -101,7 +69,7 @@
             fetchLookbookByDate(formatDate(currentDate));
         }
 
-        //updated function
+        //Updated function
         async function  fetchLookbookByDate(date) {
             const res = await fetch(`http://localhost:3000/lookbook?date=${date}`);
             const data = await res.json();
@@ -130,7 +98,7 @@
             })
             
         }
-
+        //Remove From Lookbook
         async function removeFromLookbook(id) {
             await fetch(`http://localhost:3000/lookbook/${id}`,{method: 'DELETE'});
             fetchLookbookByDate(formatDate(currentDate));
@@ -138,7 +106,7 @@
         }
 
     
-
+        //Fetch Clothes
         async function fetchClothes() {
             const res = await fetch('http://localhost:3000/clothes');
             const data = await res.json();
@@ -164,37 +132,6 @@
             });
         }
      
-
-    //     function loadandModify(item, svg_con) {
-    //     const svgFile = `/images/${svg_con}.svg`;
-    //     console.log("The svg file is", svgFile);
-
-    //     return fetch(svgFile)
-    //         .then(response => {
-    //             if (!response.ok) {
-    //                 throw new Error(`Failed to load SVG: ${response.statusText}`);
-    //             }
-    //             return response.text();
-    //         })
-    //         .then(svgContent => {
-    //             const parser = new DOMParser();
-    //             const svgDoc = parser.parseFromString(svgContent, 'image/svg+xml');
-
-    //             const clothingBody = svgDoc.querySelector(`#${svg_con}-body`);
-    //             if (clothingBody) {
-    //                 clothingBody.setAttribute('fill', item.color); // Set color dynamically
-    //             } else {
-    //                 console.warn(`Element #${svg_con}-body not found in ${svg_con}.svg`);
-    //             }
-
-    //             return svgDoc.documentElement.outerHTML;
-    //         })
-    //         .catch(err => {
-    //             console.error('Error loading the SVG:', err);
-    //             return ''; // Fallback if error
-    //         });
-    // }
-
 
         async function fetchLookbook(){
             const res = await fetch ('http://localhost:3000/lookbook');
@@ -239,11 +176,13 @@
             });
             form.reset();
             fetchClothes();
+            
         });
 
         async function deleteClothes(id) {
             await fetch(`http://localhost:3000/clothes/${id}`, { method: 'DELETE' });
             fetchClothes();
+            fetchLookbookByDate(formatDate(currentDate));
         }
 
         // Fetch weather-based clothing recommendations
@@ -282,7 +221,7 @@
 
             const { top, bottoms, footwear } = data.recommendations; 
 
-            //Division of each categorical group
+            //Division Of Each Categorical Group
             if (top) {
                 const div = document.createElement('div');
                 div.classList.add('recommendation-item');

@@ -125,13 +125,6 @@ button:hover{
     color: #4B3E2E;
 }
 
-/* .clothes-item{
-    background: white;
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0 1px 4px black;
-    text-align: center;
-} */
 
 .clothes-item img,
 .clothes-item svg, .lookbook-item img,
@@ -232,25 +225,6 @@ button:hover{
 .right-button button:hover{
     background-color: #555;
 }
-
-
-
-
-
-
-
-
-
-
-
-/* .clothes-item, .lookbook-item, .recommendations-item{
-    background-color: white;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 8px 12px black;
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-} */
 
 
 

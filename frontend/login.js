@@ -1,4 +1,4 @@
-//login functionality
+//Login Functionality
 document.getElementById('login-form').addEventListener('submit', function (e) {
     const email = document.getElementById('email').value;
     const username = document.getElementById('username').value;

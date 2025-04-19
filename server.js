@@ -13,23 +13,23 @@ const bcrypt = require('bcrypt'); // for encryption
 const session = require('express-session');
 
 
-
+//Express
 const app = express();
 const port = 3000;
 const API_KEY = '35ee18a6ae4749d48dc125126250603';
 
 app.use(cors());
 app.use(express.json());
-app.use('/images', express.static('public/images'));// svg image usage
+app.use('/images', express.static('public/images'));// SVG Image
 
 
-// makes login the front page
+// Login Front Page
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/frontend/login.html');
 });
 app.use(express.static('frontend'));
 
-// user id isn't processing
+// Session Creation
 app.use(session({
     secret: '123',  
     resave: false,
@@ -195,6 +195,7 @@ db.run(`CREATE TABLE IF NOT EXISTS user_settings (
 // db.run(`ALTER TABLE clothes 
 //     ADD COLUMN practicality INTEGER;`
 // );
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('login')); 
 //Sign up connection
@@ -243,6 +244,7 @@ app.post('/login', (req, res) => {
     });
 });
 
+//Frontend Connection
 app.get('/login', (req, res) => {
     res.sendFile(__dirname + '/frontend/login.html');
 });
@@ -255,7 +257,7 @@ app.get('/lookbook-page', (req, res) => {
     res.sendFile(__dirname + '/frontend/lookbook.html');
 });
 
-//usercreation
+//User Creation
 app.get('/user/:userId', (req, res) => {
     const userId = req.params.userId;
 
@@ -275,6 +277,7 @@ app.get('/user/:userId', (req, res) => {
     });
 });
 
+//Logout Session
 app.get('/logout',(req,res)=>{
     req.session.destroy(err => {
         if(err){
@@ -284,7 +287,7 @@ app.get('/logout',(req,res)=>{
     });
 });
 
-
+//GET Request: clothes
 app.get('/clothes', (req, res) => {
     const userId = req.session.user_id;
 
@@ -445,7 +448,7 @@ app.post('/clothes', (req, res) => {
 
     const svg_con = getClothingName(name , category);
 
-                // SVG manually
+                // SVG manual Additions
                 let svgContent = '';
 
                 if (svg_con === 'shirt') {
@@ -935,6 +938,7 @@ app.get ('/lookbook',(req, res) => {
 
 });
 
+//POST Request: Lookbook
 app.post ('/lookbook',(req, res) => {
     const userId = req.session.user_id;
     const {clothing_id, date} = req.body;
@@ -945,6 +949,7 @@ app.post ('/lookbook',(req, res) => {
 
 });
 
+//Delete lookbook 
 app.delete('/lookbook/:id', async(req,res)=>{
     const id = req.params.id;
     db.run("DELETE FROM lookbook WHERE id = ?", [id], function(err){
@@ -991,7 +996,7 @@ app.get('/lookbooks/today',(req,res)=>{
     )
 })
 
-
+//Lookbook Likes
 app.post('/like-lookbook', (req, res) => {
     const liker_id = req.session.user_id; 
     const { lookbook_user_id, date } = req.body;
@@ -1030,6 +1035,7 @@ app.post('/like-lookbook', (req, res) => {
 //     });
 // });
 
+//Lookbook Date
 app.get('/lookbooks/:date',(req,res)=>{
     const date= req.params.date;
     db.all(`SELECT lb.user_id,c.name,c.category,c.color,c.svg
@@ -1082,7 +1088,7 @@ app.get ('/analytics',async (req, res) => {
             );
         });
 
-        // not sure if I want to keep this
+        // Weather Category
 
         // const weatherAnalytics = await db.all (
         //     `SELECT w.condition, c.name, COUNT(l.clothing_id) AS count
@@ -1156,7 +1162,7 @@ app.post("/donate", (req, res) => {
 
 
 
-
+//GET Request: Donated Clothes
 app.get("/donated-clothes", (req, res) => {
     const userId = req.session.user_id;
     db.all(
@@ -1171,6 +1177,8 @@ app.get("/donated-clothes", (req, res) => {
         }
     );
 });
+
+//POST Request: Reclaim
 app.post('/reclaim', (req, res) => {
     const { id } = req.body;
 
@@ -1229,23 +1237,38 @@ async function getClothingCategories(weatherType, category) {
     
 }
 
-// Delete a clothing item from the database
+// Delete a clothing item from the database - lookbook item is deleted too
 app.delete('/clothes/:id', (req, res) => {
     const { id } = req.params;
-    db.run('DELETE FROM clothes WHERE id = ?', [id], function (err) {
-        if (err) {
-            res.status(500).json({ error: err.message });
-            return;
+
+    db.get('SELECT 1 FROM lookbook WHERE clothing_id = ?', [id], (err, row) => {
+        //Delete Clothing Function
+        const deleteClothes = () => {
+            db.run('DELETE FROM clothes WHERE id = ?', [id], function (err) {
+                if (err) {
+                    res.status(500).json({ error: err.message });
+                    return;
+                }
+                res.json({ message: 'Item deleted' });
+            });
+        };
+        //If Item is in lookbook
+        if (row) {
+            db.run('DELETE FROM lookbook WHERE clothing_id = ?', [id], function (err) {
+                if (err) {
+                    res.status(500).json({ error: 'Failed to remove item from lookbook: ' + err.message });
+                    return;
+                }
+                deleteClothes(); 
+            });
+        } else {
+            deleteClothes();
         }
-        if (this.changes === 0) {
-            res.status(404).json({ error: 'Item not found' });
-            return;
-        }
-        res.json({ message: 'Item deleted' });
     });
 });
 
-//Default user location
+
+//Default User Location - Not working currently
 app.post('/users/location', async (req, res) => {
     const userId = req.session.user_id;
     const { location } = req.body;

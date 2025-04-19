@@ -9,7 +9,6 @@ function clusterOutfits(clothingItems, numClusters = 3) {
 
     if (categoryItems.length === 0) return [];
 
-    // manually add colours - remember to add more 
     const colorItems = {
         red: [255, 0, 0],
         blue: [0, 0, 255],
@@ -18,7 +17,8 @@ function clusterOutfits(clothingItems, numClusters = 3) {
         white: [255, 255, 255],
         pink: [255, 192, 203],
         brown: [165, 42, 42],
-        purple: [128, 0, 128]
+        purple: [128, 0, 128],
+        beige:[245, 245, 220]
       };
 
       const rawFeatures = categoryItems.map (item =>{
@@ -29,7 +29,8 @@ function clusterOutfits(clothingItems, numClusters = 3) {
           ...rgb 
         ];
       });
-
+    
+    //PCA
     const pca = new PCA(rawFeatures);
     const features = pca.predict(rawFeatures, {nComponents: 2}). to2DArray();
     
@@ -43,7 +44,7 @@ function clusterOutfits(clothingItems, numClusters = 3) {
     if (uniqueValues.size === 1) {
         return categoryItems.map((item, index) => ({ ...item, cluster: index % numClusters }));
     }
-
+    //K-means
     const { clusters } = ml.kmeans(features, Math.min(numClusters, categoryItems.length));
 
     return categoryItems.map((item, index) => ({
@@ -51,7 +52,7 @@ function clusterOutfits(clothingItems, numClusters = 3) {
         cluster: clusters[index]
     }))
 }
-
+//Sort Outfit Recommendations
 function getOutfitRecommendation(clothingItems, weatherSuitability) {
     console.log("Raw clothing items:", clothingItems); 
     console.log("Weather suitability:", weatherSuitability);

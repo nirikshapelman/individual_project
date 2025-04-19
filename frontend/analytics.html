@@ -33,6 +33,7 @@
     </div>
 
     <script>
+        // Fetch Analytics Data
         async function fetchAnalytics() {
             console.log('Fetching analytics...'); 
             try {
@@ -47,7 +48,7 @@
                 console.error("Failed to fetch analytics", err);
             }
         }
-
+        // Display Data
         function displayAnalytics(containerId, items) {
             console.log('Fetched Items:', items);  
             const container = document.getElementById(containerId);
@@ -81,7 +82,7 @@
                 container.appendChild(div);
             });
         }
-
+        // Clothes Donation
         function donateClothes(id) {
             console.log("Clothing ID to donate:", id);
 
@@ -101,7 +102,7 @@
             })
             .catch(error => console.error("Error:", error));
         }
-
+        //Fetch Donated Clothes
         function fetchDonatedClothes() {
             fetch("http://localhost:3000/donated-clothes")
             .then(res => res.json())
@@ -126,7 +127,7 @@
             })
             .catch(error => console.error("Error fetching donated clothes:", error));
         }
-
+        //Reclaim Clothes
         function reclaimClothes(id) {
             fetch("http://localhost:3000/reclaim", { 
                 method: 'POST',
@@ -143,7 +144,7 @@
                 }
             });
         }
-                
+        //Reclaim Deleted Function       
         function deleteDonatedClothes(id) {
             fetch("http://localhost:3000/delete-donated", { 
                 method: 'POST',

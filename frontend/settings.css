@@ -20,7 +20,8 @@ h1{
     margin-bottom: 50px;
 }
 
-div{
+/* for location save */
+/* div{
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -28,7 +29,7 @@ div{
     background-color: white;
     padding: 20px;
     border-radius: 8px;
-}
+} */
 
 label{
     font-size: 1rem;

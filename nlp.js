@@ -11,6 +11,7 @@ classifier.addDocument('jeans, trainers, t-shirt', 'all-weather');
 
 classifier.train();
 
+//Sort Weather Suitabilty
 function determineWeatherSuitability(itemName){
     const words = tokenizer.tokenize(itemName.toLowerCase());
     const stemWords = words.map (word => natural.PorterStemmer.stem(word));

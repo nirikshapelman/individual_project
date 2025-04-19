@@ -1,4 +1,4 @@
-//generating images with svg
+//Generating Images With SVG
 function loadandModify(item){
     const svgFile = `${item.n}.svg`;
 
