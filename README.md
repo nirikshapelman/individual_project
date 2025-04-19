@@ -23,7 +23,7 @@
 (nodejs.org)
 
 #2 Navigate path
-cd c:\runpath
+cd "C:\runpath"
 
 #3 Check Install
 node -v
