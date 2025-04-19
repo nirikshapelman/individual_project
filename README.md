@@ -1,28 +1,28 @@
-Download Node.js
+#1 Download Node.js
 (nodejs.org)
 
-Navigate path
+#2 Navigate path
 cd c:\runpath
 
-Check Install
+#3 Check Install
 node -v
 npm -v
 
-Install Dependancies
+#4 Install Dependancies
 npm install
 
-Install Sqlite3
+#5 Install Sqlite3
 npm install sqlite3
 
-Delete node modueles and packages (if needed)
+#5.1 Delete node modueles and packages (if needed)
 rm -rf node_modules package-lock.json
 npm install
 
-Run the server
+#6 Run the server
 node server.js
 run http://localhost:3000
 
-login details:
+#Login details:
 
 email: anna@gmail.com
 username: anna
@@ -32,5 +32,8 @@ email: lisa@gmail.com
 username: lisa
 password:lisa
 
-github repo:
+#Github Repo:
 https://github.com/nirikshapelman/individual_project.git
+
+#Create New Account:
+Add at least 3 items (top,bottoms and footwear) before using the recommendation system.
